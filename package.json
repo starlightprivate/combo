@@ -11,7 +11,8 @@
     "frontend": "gulp build",
     "start": "babel-node server.js",
     "install": "gulp build",
-    "test": "snyk test && gulp xsslint"
+    "test1": "snyk test && gulp xsslint",
+    "test": "mocha --compilers js:babel-core/register"
   },
   "snyk": true,
   "dependencies": {
@@ -19,13 +20,10 @@
     "bithound": "^1.7.0",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
-    "codacy-coverage": "^2.0.0",
     "compression": "^1.6.2",
     "connect-redis": "^3.2.0",
     "cssfilter": "^0.0.8",
     "express": "^4.14.0",
-    "express-content-length-validator": "^1.0.0",
-    "express-force-ssl": "^0.3.2",
     "express-promise-router": "^1.1.1",
     "express-session": "^1.15.0",
     "fast-csv": "^2.3.0",
@@ -59,16 +57,9 @@
     "babel-preset-stage-0": "^6.16.0",
     "babel-runtime": "^6.18.0",
     "bithound": "^1.7.0",
-    "chai": "^3.5.0",
-    "chai-as-promised": "^6.0.0",
-    "eslint": "^3.10.0",
-    "eslint-config-standard": "^6.2.1",
-    "eslint-plugin-promise": "^3.3.2",
-    "eslint-plugin-standard": "^2.0.1",
-    "nodemon": "^1.11.0",
+    "codacy-coverage": "^2.0.0",
     "supertest": "^2.0.1",
     "mocha": "^3.2.0",
-    "mocha-lcov-reporter": "^1.2.0",
     "del": "^2.2.2",
     "glob": "^7.1.1",
     "gulp": "^3.9.1",
@@ -86,7 +77,8 @@
     "gulp-sass": "^3.1.0",
     "gulp-size": "^2.1.0",
     "gulp-strip-css-comments": "^1.2.0",
-    "gulp-uglify": "^2.0.0"
+    "gulp-uglify": "^2.0.0",
+    "should": "^11.2.0"
   },
   "repository": {
     "type": "git",

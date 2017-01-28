@@ -116,6 +116,7 @@ gulp.task("clean-all", function (cb) {
     path.join(config.dist, '*.html'),
     path.join(config.dist, '*.ico'),
     path.join(config.dist, 'assets'),
+    path.join(config.dist, 'robots.txt'),
   ],cb)
 });
 
@@ -191,6 +192,13 @@ gulp.task("safe-regex", function () {
 //   });
 // });
 
+
+gulp.task('robots', function () {
+  return gulp
+    .src(path.join(config.src,'robots.txt'))
+    .pipe(gulp.dest(config.dist));
+});
+
 // Build Task !
 gulp.task("build", ["clean-all"], function (done) {
   runSequence(
@@ -204,6 +212,7 @@ gulp.task("build", ["clean-all"], function (done) {
     "fonts",
     "images",
     "html",
+    "robots",
     "csscopy",
     "stripcss",
     "csspurify",

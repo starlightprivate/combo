@@ -141,7 +141,7 @@ app.use(function (err, req, res, next) {
 });
 
 //for unit tests
-exports.app = app;
+module.exports = exports = app;
 
 //actually start application
 if (!module.parent) {
