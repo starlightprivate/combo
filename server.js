@@ -17,10 +17,14 @@ import compression from 'compression'
 import expressPromiseRouter from 'express-promise-router';
 
 
+import hoganExpress from 'hogan-express';
+
 //proper session implementation
-import cookieParser from 'cookie-parser';
-import expressSession from 'express-session';
-import connectRedis from 'connect-redis'
+import expressSession from 'express-session'; //initialize sessions
+import cookieParser from 'cookie-parser'; // parse cookies to start sessions from
+import connectRedis from 'connect-redis'//store session data in redis database
+import csurf from 'csurf'; //add CSRF protection https://www.npmjs.com/package/csurf
+
 //redis database
 import redis from './lib/redisManager.js';
 
@@ -35,6 +39,7 @@ import raven from 'raven';
 
 // import csvimport from './config/import';
 import { routes } from './routes/v2';
+import serverSideGeneratedPagesRoutes from './routes/serverSideGeneratedPages';
 
 const app = express();
 
@@ -48,6 +53,15 @@ if (config.ENV === 'development') {
 
 winston.info("Running on %s environment", config.ENV);
 
+
+//setting server side templates
+app.engine('html', hoganExpress);
+app.set('views', path.join(__dirname, 'views'));
+app.set('layout', 'layout');
+app.set('view engine', 'html');
+
+//to not conflict with Angular and other client side JS that use {{ }} for data
+app.locals.delimiters = '[[ ]]';
 
 app.use(raven.middleware.express.requestHandler(config.ravenMiddleWareUri));
 app.use(compression());
@@ -109,25 +123,28 @@ app.use(expressSession({
   saveUninitialized: true
 }));
 
+const csrfProtectionMiddleware = csurf({ cookie: true });
+app.use(csrfProtectionMiddleware);
 
 app.use(function (req, res, next) {
   res.set(`X-Powered-By`, `TacticalMastery`);
   next();
 });
 
-app.use(express.static('./public'));
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join('public','index.html'));
-});
+// server side generated pages, not api!
 
-// route with appropriate version prefix
+serverSideGeneratedPagesRoutes(app);
+
+//load API routes with appropriate version prefix
 Object.keys(routes).forEach(r => {
   const router = expressPromiseRouter();
   // pass promise route to route assigner
   routes[r](router);
   app.use(`/api/${r}`, router);
 });
+//and, serve static assets at last
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(raven.middleware.express.errorHandler(config.ravenMiddleWareUri));
 
