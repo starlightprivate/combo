@@ -131,6 +131,26 @@ app.use(function (req, res, next) {
   next();
 });
 
+//protect from tampering session - basic example
+//it saves IP and entry point into session.
+//if IP changes, it is likely to be bot or somebody using tor
+//if entryPoint is the api endpoint being called now, it is likely to be bot
+
+//https://starlightgroup.atlassian.net/browse/SG-5
+//https://starlightgroup.atlassian.net/browse/SG-8
+//https://starlightgroup.atlassian.net/browse/SG-9
+app.use(function (req,res, next) {
+  //http://stackoverflow.com/a/10849772/1885921
+  req.session.ip =  req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  if (!req.session.entryPoint) {
+    //http://expressjs.com/en/api.html#req.originalUrl
+    req.session.entryPoint = req.originalUrl;
+  }
+  next();
+});
+
+
+
 //provide CSRF token in Anatolij's way - it works with angular 1.x from the box
 app.use(function (req,res,next) {
   if (req.session) {
