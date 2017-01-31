@@ -12,7 +12,8 @@
     "start": "babel-node server.js",
     "install": "gulp build",
     "test1": "snyk test && gulp xsslint",
-    "test": "mocha --compilers js:babel-core/register"
+    "test": "mocha --compilers js:babel-core/register",
+    "zipCodes":"babel-node populateRedisWithZipCodes.js"
   },
   "snyk": true,
   "dependencies": {
