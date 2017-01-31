@@ -131,6 +131,24 @@ app.use(function (req, res, next) {
   next();
 });
 
+//provide CSRF token in Anatolij's way - it works with angular 1.x from the box
+app.use(function (req,res,next) {
+  if (req.session) {
+    const token = req.csrfToken();
+    res.locals.csrf = token;
+    res.cookie('XSRF-TOKEN', token);
+    next();
+  } else {
+    next();
+  }
+});
+
+//provide csrf token in Safi's way.
+app.get('/api_key.js', function(req, res) {
+  res.setHeader('content-type', 'text/javascript');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.end("window.api_key = '" + req.csrfToken() + "'");
+});
 
 // server side generated pages, not api!
 
