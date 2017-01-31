@@ -2,6 +2,8 @@
 import supertest from 'supertest';
 import app from './../server.js';
 
+require('should');
+
 describe('web application can be started', function () {
   it('serves 200 on / with proper headers', function (done) {
     supertest(app)
@@ -69,13 +71,39 @@ describe('v2 api', function () {
       .expect(200)
       .expect('pong', done);
   });
-});
-
-describe('statis assets', function () {
-  it('serves  200 and text-plain for /robots.txt', function (done) {
+  it('has 200 for /api/v2/state/0054', function (done) {
     supertest(app)
-      .get('/robots.txt')
-      .expect('Content-Type', /text\/plain/)
+      .get('/api/v2/state/00544')
+      .expect('Content-Type', /application\/json/, done)
+      .expect(200)
+      .end(function (err, res) {
+        if(err){
+          return done(err);
+        }
+        res.body.data.state.should.be.equal('NY');
+        done();
+      });
+  });
+  it('it has 200  on /api/v2/add-contact', function (done) {
+    supertest(app)
+      .post('/api/v2/add-contact')
+      .send({
+        FirstName: 'test_FirstName',
+        LastName: 'test_LastName',
+        Email: 'test@email.com',
+        Phone: '222-222-4444'
+      })
+      .expect(200, done);
+  });
+  it('it has 200  on /api/v2/update-contact', function (done) {
+    supertest(app)
+      .post('/api/v2/update-contact')
+      .send({
+        firstName: 'test_FirstName_updated',
+        lastName: 'test_LastName_updated',
+        emailAddress: 'test@email.com',
+        phoneNumber: '111-222-3333'
+      })
       .expect(200, done);
   });
 });
