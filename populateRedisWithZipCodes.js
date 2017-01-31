@@ -1,4 +1,4 @@
-'use scrict';
+'use strict';
 
 import * as redis from './lib/redisManager';
 import path from 'path'
