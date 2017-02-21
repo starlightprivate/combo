@@ -13,7 +13,9 @@
     "install": "gulp build",
     "test1": "snyk test && gulp xsslint",
     "test": "mocha --compilers js:babel-core/register",
-    "zipCodes":"babel-node populateRedisWithZipCodes.js"
+    "zipCodes": "babel-node populateRedisWithZipCodes.js",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "snyk": true,
   "dependencies": {
@@ -44,7 +46,7 @@
     "request-promise": "^4.1.1",
     "run-sequence": "^1.2.2",
     "safe-regex": "^1.1.0",
-    "snyk": "^1.19.1",
+    "snyk": "^1.25.1",
     "through": "^2.3.8",
     "validator": "^6.2.0",
     "winston": "^2.3.1",
