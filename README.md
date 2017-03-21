@@ -1,6 +1,8 @@
 Combo container - both frontend and api code
 ===============================================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/starlightgroup/combo.svg?token=1278a17b535383fe9884d33c6f75d28f3778b1d6a145915037ba8251dbd7d301)](https://greenkeeper.io/)
+
 
 
 Tunnable configuration parameters
